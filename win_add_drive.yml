@@ -1,0 +1,37 @@
+---
+- name: Add a drive to a Windows system
+  hosts: ec2-54-145-210-201.compute-1.amazonaws.com
+  vars:
+    disk_info:
+      - disk_tags: tprinz-Binaries
+        disk_serial_num: "024ad5a71a8871dca"
+        disk_drive_letter: "E"
+        drive_name: "Binaries"
+      - disk_tags: tprinz-Data
+        disk_serial_num: "085e8ed1e6e97552a"
+        disk_drive_letter: "S"
+        drive_name: "Data"
+      - disk_tags: tprinz-Logs
+        disk_serial_num: "0390a06346f910322"
+        disk_drive_letter: "L"
+        drive_name: "Logs"
+      - disk_tags: tprinz-Backups
+        disk_serial_num: "02c09a964900c46dd"
+        disk_drive_letter: "G"
+        drive_name: "Backups"
+
+  tasks:
+#    - name: Test connectivity
+#      win_ping:
+
+    - name: get disk facts
+      win_disk_facts:
+      register: sys_disk_facts
+
+    - name: print facts
+      debug:
+        var: ansible_facts
+
+    - name: print disk facts
+      debug:
+        var: sys_disk_facts
