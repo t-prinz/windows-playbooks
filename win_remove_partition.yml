@@ -73,20 +73,10 @@
         - "{{ ansible_disks }}"
       when: item[0].disk_serial_num == item[1].serial_number
 
-#    - name: initialize disk
-#      win_shell: "Initialize-Disk -Number {{ item.drive_number }}"
-#      with_items: "{{ disk_info }}"
-
-    - name: create partition using all available space
+    - name: remove partition
       win_partition:
         drive_letter: "{{ item.disk_drive_letter }}"
         partition_size: -1
         disk_number: "{{ item.drive_number }}"
-      with_items: "{{ disk_info }}"
-
-    - name: format the partition as NTFS and label it
-      win_format:
-        drive_letter: "{{ item.disk_drive_letter }}"
-        file_system: NTFS
-        new_label: "{{ item.drive_name }}"
+        state: absent
       with_items: "{{ disk_info }}"
